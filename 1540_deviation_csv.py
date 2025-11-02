@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import yfinance as yf
 import pandas as pd
+import matplotlib.pyplot as plt
 from datetime import datetime
 import os
 
@@ -17,7 +18,7 @@ def main():
 
     gold_deviation = (goldetf_price - goldnav) / goldnav * 100
 
-    # CSVに追記
+    # --- CSVに追記 ---
     data = {
         "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "etf_price": goldetf_price,
@@ -35,6 +36,16 @@ def main():
 
     df_all.to_csv(filename, index=False)
     print(df_new)
+
+    # --- グラフを生成して保存 ---
+    plt.figure(figsize=(10,5))
+    plt.plot(df_all["date"], df_all["deviation(%)"], marker="o")
+    plt.title("1540.T NAV乖離率の推移")
+    plt.xlabel("日付")
+    plt.ylabel("乖離率 (%)")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig("gold_deviation.png")
 
 if __name__ == "__main__":
     main()
