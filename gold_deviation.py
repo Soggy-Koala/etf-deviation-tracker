@@ -1,51 +1,32 @@
-# -*- coding: utf-8 -*-
-import yfinance as yf
-import pandas as pd
 import matplotlib.pyplot as plt
-from datetime import datetime
-import os
+import pandas as pd
 
-def main():
-    goldetf_ticker = "1540.T"
-    goldetf = yf.Ticker(goldetf_ticker)
-    goldetf_price = goldetf.history(period="1d")["Close"].iloc[-1]
-    goldinfo = goldetf.info
-    goldnav = goldinfo.get("navPrice")
+# CSV 読み込み（すでに df_all がある場合は不要）
+df_all = pd.read_csv("gold_deviation_log.csv")
 
-    if goldnav is None:
-        print("NAV情報が取得できませんでした。")
-        return
+# 日付を datetime 型に変換
+df_all["date"] = pd.to_datetime(df_all["date"])
 
-    gold_deviation = (goldetf_price - goldnav) / goldnav * 100
+# プロット
+fig, ax1 = plt.subplots(figsize=(10,5))
 
-    # CSVに追記
-    data = {
-        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "etf_price": goldetf_price,
-        "nav": goldnav,
-        "deviation(%)": gold_deviation
-    }
-    df_new = pd.DataFrame([data])
+# 左軸：乖離率（%）
+ax1.set_xlabel("日付")
+ax1.set_ylabel("乖離率 (%)", color="blue")
+ax1.plot(df_all["date"], df_all["deviation(%)"], color="blue", marker="o", label="乖離率")
+ax1.tick_params(axis='y', labelcolor="blue")
 
-    filename = "gold_deviation_log.csv"
-    if os.path.exists(filename):
-        df_old = pd.read_csv(filename)
-        df_all = pd.concat([df_old, df_new], ignore_index=True)
-    else:
-        df_all = df_new
+# 右軸：ETF価格
+ax2 = ax1.twinx()
+ax2.set_ylabel("ETF価格 (JPY)", color="orange")
+ax2.plot(df_all["date"], df_all["etf_price"], color="orange", marker="x", label="ETF価格")
+ax2.tick_params(axis='y', labelcolor="orange")
 
-    df_all.to_csv(filename, index=False)
-    print(df_new)
+# タイトルとグリッド
+plt.title("1540.T ETF価格とNAV乖離率の推移")
+fig.tight_layout()
+plt.grid(True)
 
-    # グラフを生成してPNGで保存
-    plt.figure(figsize=(10,5))
-    plt.plot(pd.to_datetime(df_all["date"]), df_all["deviation(%)"], marker="o")
-    plt.title("1540.T NAV乖離率の推移")
-    plt.xlabel("日付")
-    plt.ylabel("乖離率 (%)")
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig("gold_deviation.png")
-
-if __name__ == "__main__":
-    main()
+# PNG 保存
+plt.savefig("gold_deviation.png")
+plt.close()
