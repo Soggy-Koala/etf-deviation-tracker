@@ -9,10 +9,10 @@ jobs:
   run-script:
     runs-on: ubuntu-latest
     steps:
-      # コードを取得
+      # コードを取得（認証情報を保持）
       - uses: actions/checkout@v4
         with:
-          persist-credentials: false  # 後でトークンで認証するため
+          persist-credentials: true  # これで git push が自動認証される
 
       # Python セットアップ
       - name: Set up Python
@@ -35,4 +35,4 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add gold_deviation_log.csv gold_deviation.png
           git diff-index --quiet HEAD || git commit -m "Update ETF deviation data"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:main
+          git push
