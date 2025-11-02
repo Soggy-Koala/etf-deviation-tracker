@@ -9,11 +9,30 @@ jobs:
   run-script:
     runs-on: ubuntu-latest
     steps:
-      # コードを取得（自分のリポジトリに対して push 可能にする）
+      # コードを取得（自分のリポジトリに push 可能にする）
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # Python セットアップ
+      # Python セットアップ（バージョンを明示）
       - name: Set up Python
         uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 依存パッケージインストール
+      - name: Install dependencies
+        run: pip install yfinance pandas matplotlib
+
+      # Pythonスクリプト実行
+      - name: Run Python script
+        run: python gold_deviation.py
+
+      # CSV + PNG を commit & push
+      - name: Commit and push results
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add gold_deviation_log.csv gold_deviation.png
+          git diff-index --quiet HEAD || git commit -m "Update ETF deviation data"
+          git push
