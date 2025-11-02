@@ -9,10 +9,10 @@ jobs:
   run-script:
     runs-on: ubuntu-latest
     steps:
-      # コードを取得（自分のリポジトリに push 可能にする）
+      # コードを取得（PAT を使って push 可能にする）
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
 
       # Python セットアップ（バージョンを明示）
       - name: Set up Python
