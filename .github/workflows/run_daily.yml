@@ -2,7 +2,12 @@ name: Run Daily ETF Tracker
 
 on:
   schedule:
-    - cron: '10 6 * * *'  # 日本時間15:10ごろ（UTC）
+    - cron: '0 8 * * *'  # 日本時間17:00ごろ（UTC）
+    - cron: '10 8 * * *'  # 日本時間17:10ごろ（UTC）
+    - cron: '20 8 * * *'  # 日本時間17:20ごろ（UTC）
+    - cron: '30 8 * * *'  # 日本時間17:30ごろ（UTC）
+    - cron: '40 8 * * *'  # 日本時間17:40ごろ（UTC）
+    - cron: '50 8 * * *'  # 日本時間17:50ごろ（UTC）
   workflow_dispatch:
 
 jobs:
