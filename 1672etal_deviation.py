@@ -25,4 +25,13 @@ plt.gca().set_xlabel("Time (JST)")
 plt.gca().set_ylabel("Price / NAV")
 ax2.set_ylabel("Deviation (%)")
 plt.title("1672 et al. Price vs NAV Deviation Over Time")
-plt.xticks(rotation=
+plt.xticks(rotation=45, ha="right")
+
+# 凡例を統合
+lines, labels = plt.gca().get_legend_handles_labels()
+lines2, labels2 = ax2.get_legend_handles_labels()
+plt.legend(lines + lines2, labels + labels2, loc="best")
+
+plt.tight_layout()
+plt.savefig(png_filename)
+print(f"Saved chart as {png_filename}")
