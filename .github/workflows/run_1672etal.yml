@@ -32,7 +32,7 @@ jobs:
           pip install yfinance matplotlib pandas
 
       - name: Run 1672etal ETF tracker
-        run: python gold_etal_plot.py
+        run: python 1672etal_deviation.py
 
       - name: Commit and push results
         run: |
