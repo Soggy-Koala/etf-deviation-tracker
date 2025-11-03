@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -30,12 +32,9 @@ jobs:
           pip install yfinance matplotlib pandas
 
       - name: Run 1672etal ETF tracker
-        run: python 1672etal_deviation.py
+        run: python gold_etal_plot.py
 
-      - name: Upload results as artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: 1672etal-results
-          path: |
-            *.csv
-            *.png
+      - name: Commit and push results
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com
