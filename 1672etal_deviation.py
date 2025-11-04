@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
-import yfinance as yf
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
+import yfinance as yf
 
 def main():
-    # --- 取得時刻 ---
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    # --- 各ETFのデータ取得 ---
+    # --- 銘柄リスト ---
     tickers = {
         "1672.T": "Gold",
         "1673.T": "Silver",
@@ -17,63 +15,78 @@ def main():
         "1676.T": "RoyalMetal"
     }
 
-    results = []
+    usd_jpy = yf.Ticker("JPY=X").history(period="1d")["Close"].iloc[-1]
 
-    for tkr, name in tickers.items():
-        t = yf.Ticker(tkr)
+    data = []
+    for ticker, name in tickers.items():
+        t = yf.Ticker(ticker)
         price = t.history(period="1d")["Close"].iloc[-1]
-        info = t.info
-        nav = info.get('navPrice')
-        if nav is None:
-            continue
-        fx = yf.Ticker("JPY=X")
-        usd_jpy = fx.history(period="1d")["Close"].iloc[-1]
-        nav_jpy = nav * usd_jpy
-        deviation = (price - nav_jpy) / nav_jpy * 100
-        results.append({
-            "timestamp": timestamp,
-            "ticker": tkr,
+        nav = t.info.get("navPrice")
+
+        if nav:
+            nav_jpy = nav * usd_jpy
+            deviation = (price - nav_jpy) / nav_jpy * 100
+        else:
+            nav_jpy = None
+            deviation = None
+
+        data.append({
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "ticker": ticker,
             "name": name,
             "price": price,
-            "nav": nav_jpy,
+            "nav_jpy": nav_jpy,
             "deviation_pct": deviation
         })
 
-    # --- DataFrame作成 ---
-    df = pd.DataFrame(results)
+    # --- CSVファイル名 ---
+    csv_filename = "1672etal_data.csv"
+    png_filename = "1672etal_chart.png"
 
-    # --- ファイル保存 ---
-    ts_short = datetime.now().strftime("%Y%m%d_%H%M")
-    csv_filename = f"1672etal_data_{ts_short}.csv"
-    png_filename = f"1672etal_chart_{ts_short}.png"
-    df.to_csv(csv_filename, index=False)
+    # --- CSV追記 ---
+    df_new = pd.DataFrame(data)
+    if os.path.exists(csv_filename):
+        df_existing = pd.read_csv(csv_filename)
+        df_all = pd.concat([df_existing, df_new], ignore_index=True)
+    else:
+        df_all = df_new
+
+    df_all.to_csv(csv_filename, index=False)
 
     # --- プロット ---
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(10, 8))
+
     colors = {
-        "1672.T": "gold",
-        "1673.T": "silver",
-        "1674.T": "plum",
-        "1675.T": "gray",
-        "1676.T": "orange"
+        "Gold": "gold",
+        "Silver": "gray",
+        "Platinum": "purple",
+        "Palladium": "brown",
+        "RoyalMetal": "orange"
     }
 
-    for tkr in df["ticker"].unique():
-        sub = df[df["ticker"] == tkr]
-        c = colors.get(tkr, None)
-        plt.plot(sub["timestamp"], sub["price"], label=f"{tkr} ETF", color=c, linestyle="-")
-        plt.plot(sub["timestamp"], sub["nav"], label=f"{tkr} NAV", color=c, linestyle="--")
+    # 各ETFについて ETF実線, NAV点線
+    for name in tickers.values():
+        df_sub = df_all[df_all["name"] == name]
+        if df_sub["nav_jpy"].notna().any():
+            plt.plot(df_sub["timestamp"], df_sub["price"], label=f"{name} ETF", color=colors[name], linestyle="-")
+            plt.plot(df_sub["timestamp"], df_sub["nav_jpy"], label=f"{name} NAV", color=colors[name], linestyle="--")
 
-    plt.xticks(rotation=45, ha="right")
     plt.xlabel("Time (JST)")
-    plt.ylabel("Price (JPY)")
+    plt.ylabel("Price / NAV (JPY)")
     plt.title("ETF vs NAV (1672 et al)")
+    plt.xticks(rotation=45, ha="right")
     plt.legend()
     plt.tight_layout()
     plt.savefig(png_filename)
+    plt.close()
 
-    print(f"Saved: {csv_filename}, {png_filename}")
-    print(df[["ticker", "deviation_pct"]])
+    # --- 乖離率表示 ---
+    for row in data:
+        print(f"{row['name']} ({row['ticker']}) ETF%NAV: {row['deviation_pct']:.2f}%")
+
+    print(f"✅ Data appended to {csv_filename}")
+    print(f"✅ Chart updated: {png_filename}")
+
 
 if __name__ == "__main__":
     main()
