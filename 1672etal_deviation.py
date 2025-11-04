@@ -52,4 +52,47 @@ def main():
         df_all = df_new
 
     # timestamp列をdatetime型に変換
-    df_all["t]()_
+    df_all["timestamp"] = pd.to_datetime(df_all["timestamp"])
+    df_all.sort_values("timestamp", inplace=True)
+
+    df_all.to_csv(csv_filename, index=False)
+
+    # --- プロット ---
+    plt.figure(figsize=(10, 8))
+    colors = {
+        "Gold": "gold",
+        "Silver": "gray",
+        "Platinum": "purple",
+        "Palladium": "brown",
+        "RoyalMetal": "orange"
+    }
+
+    for name in tickers.values():
+        df_sub = df_all[df_all["name"] == name]
+        if df_sub.empty:
+            continue
+
+        # ETF実線・NAV点線を描画（データが1点ならプロット）
+        plt.plot(df_sub["timestamp"], df_sub["price"], label=f"{name} ETF", color=colors[name], linestyle="-", marker="o")
+        if df_sub["nav_jpy"].notna().any():
+            plt.plot(df_sub["timestamp"], df_sub["nav_jpy"], label=f"{name} NAV", color=colors[name], linestyle="--", marker="x")
+
+    plt.xlabel("Time (JST)")
+    plt.ylabel("Price / NAV (JPY)")
+    plt.title("ETF vs NAV (1672 et al)")
+    plt.xticks(rotation=45, ha="right")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(png_filename)
+    plt.close()
+
+    # --- 最新乖離率を表示 ---
+    for row in data:
+        print(f"{row['name']} ({row['ticker']}) ETF%NAV: {row['deviation_pct']:.2f}%")
+
+    print(f"✅ Data appended to {csv_filename}")
+    print(f"✅ Chart updated: {png_filename}")
+
+
+if __name__ == "__main__":
+    main()
