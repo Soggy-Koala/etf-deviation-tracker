@@ -9,10 +9,10 @@ def main():
     # --- 銘柄リスト ---
     tickers = {
         "1672.T": "Gold",
-        "1673.T": "Silver",
-        "1674.T": "Platinum",
-        "1675.T": "Palladium",
-        "1676.T": "RoyalMetal"
+        "1673.T": "Silver"#,
+        #"1674.T": "Platinum",
+        #"1675.T": "Palladium",
+        #"1676.T": "RoyalMetal"
     }
 
     usd_jpy = yf.Ticker("JPY=X").history(period="1d")["Close"].iloc[-1]
@@ -61,10 +61,10 @@ def main():
     plt.figure(figsize=(10, 8))
     colors = {
         "Gold": "gold",
-        "Silver": "gray",
-        "Platinum": "purple",
-        "Palladium": "brown",
-        "RoyalMetal": "orange"
+        "Silver": "gray"#,
+        #"Platinum": "purple",
+        #"Palladium": "brown",
+        #"RoyalMetal": "orange"
     }
 
     for name in tickers.values():
