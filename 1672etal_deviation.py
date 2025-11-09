@@ -8,8 +8,8 @@ import yfinance as yf
 def main():
     # --- 銘柄リスト ---
     tickers = {
-        "1672.T": "Gold",
-        "1673.T": "Silver"#,
+        "1672.T": "Gold"#,
+        #"1673.T": "Silver"#,
         #"1674.T": "Platinum",
         #"1675.T": "Palladium",
         #"1676.T": "RoyalMetal"
@@ -60,8 +60,8 @@ def main():
     # --- プロット ---
     plt.figure(figsize=(10, 8))
     colors = {
-        "Gold": "gold",
-        "Silver": "gray"#,
+        "Gold": "gold"#,
+        #"Silver": "gray"#,
         #"Platinum": "purple",
         #"Palladium": "brown",
         #"RoyalMetal": "orange"
