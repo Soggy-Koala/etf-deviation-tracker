@@ -40,8 +40,8 @@ def main():
         })
 
     # --- CSVファイル名 ---
-    csv_filename = "1672etal_data.csv"
-    png_filename = "1672etal_chart.png"
+    csv_filename = "1672.csv"
+    png_filename = "1672.png"
 
     # --- CSV追記 ---
     df_new = pd.DataFrame(data)
@@ -79,7 +79,7 @@ def main():
 
     plt.xlabel("Time (JST)")
     plt.ylabel("Price / NAV (JPY)")
-    plt.title("ETF vs NAV (1672 et al)")
+    plt.title("ETF vs NAV (1672)")
     plt.xticks(rotation=45, ha="right")
     plt.legend()
     plt.tight_layout()
