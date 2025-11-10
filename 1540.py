@@ -20,7 +20,7 @@ def main():
         nav = t.info.get("navPrice")
 
         if nav:
-            nav_jpy = nav * usd_jpy
+            nav_jpy = nav
             deviation = (price - nav_jpy) / nav_jpy * 100
         else:
             nav_jpy = None
