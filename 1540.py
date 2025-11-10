@@ -8,11 +8,7 @@ import yfinance as yf
 def main():
     # --- 銘柄リスト ---
     tickers = {
-        "1672.T": "Gold"#,
-        #"1673.T": "Silver"#,
-        #"1674.T": "Platinum",
-        #"1675.T": "Palladium",
-        #"1676.T": "RoyalMetal"
+        "1540.T": "Gold"
     }
 
     usd_jpy = yf.Ticker("JPY=X").history(period="1d")["Close"].iloc[-1]
@@ -40,8 +36,8 @@ def main():
         })
 
     # --- CSVファイル名 ---
-    csv_filename = "1672.csv"
-    png_filename = "1672.png"
+    csv_filename = "1540.csv"
+    png_filename = "1540.png"
 
     # --- CSV追記 ---
     df_new = pd.DataFrame(data)
@@ -79,7 +75,7 @@ def main():
 
     plt.xlabel("Time (JST)")
     plt.ylabel("Price / NAV (JPY)")
-    plt.title("ETF vs NAV (1672)")
+    plt.title("ETF vs NAV (1540)")
     plt.xticks(rotation=45, ha="right")
     plt.legend()
     plt.tight_layout()
