@@ -41,18 +41,13 @@ jobs:
       - name: Run 1540 ETF tracker
         run: |
           python 1540.py
-
-      - name: Commit and push results
+      - name: Commit and push if changed
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add 1540*.png 1540*.csv || true
-
-          # 変更がある場合のみコミット
-          if ! git diff --cached --quiet; then
-            git commit -m "Update 1540 ETF data"
-            git push origin main
-          else
-            echo "No changes to commit."
-          fi
+          git pull --rebase origin main || true
+          git add .
+          git commit -m "Update 1672 ETF data" || exit 0
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
