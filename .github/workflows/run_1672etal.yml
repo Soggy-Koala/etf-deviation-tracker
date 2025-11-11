@@ -1,56 +1,119 @@
-name: Run 1672etal ETF Tracker
+# -*- coding: utf-8 -*-
+import os
+import pandas as pd
+import matplotlib.pyplot as plt
+from datetime import datetime
+import yfinance as yf
 
-on:
-  schedule:
-    # JST = UTC +9
-    # 平日（月〜金）の 8:00 / 12:00 / 16:00 に実行
-    - cron: '0 23 * * 0-4'  # 月〜金 8:00 JST（＝前日23:00 UTC）
-    - cron: '0 3 * * 1-5'   # 月〜金 12:00 JST（＝同日03:00 UTC）
-    - cron: '0 7 * * 1-5'   # 月〜金 16:00 JST（＝同日07:00 UTC）
-  workflow_dispatch:        # 手動実行も可
+def main():
+    # --- 銘柄リスト ---
+    tickers = {
+        "1672.T": "Gold",
+        "1673.T": "Silver",
+        "1674.T": "Platinum",
+        "1675.T": "Palladium"
+    }
 
-permissions:
-  contents: write  # ← github-actions[bot] が push できるようにする
+    # --- USD/JPY 為替レートを取得 ---
+    usd_jpy = yf.Ticker("JPY=X").history(period="1d")["Close"].iloc[-1]
 
-jobs:
-  run:
-    runs-on: ubuntu-latest
+    data = []
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+    # --- 各ETFのデータを取得 ---
+    for ticker, name in tickers.items():
+        t = yf.Ticker(ticker)
+        hist = t.history(period="1d")
+        if hist.empty:
+            print(f"⚠️ No data for {ticker}")
+            continue
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+        price = hist["Close"].iloc[-1]
+        nav = t.info.get("navPrice")
 
-      - name: Install dependencies
-        run: |
-          pip install yfinance pandas matplotlib
+        if nav:
+            nav_jpy = nav * usd_jpy
+            deviation = (price - nav_jpy) / nav_jpy * 100
+        else:
+            nav_jpy = None
+            deviation = None
 
-      - name: Run 1672etal.py
-        run: |
-          python 1672etal.py
+        data.append({
+            "timestamp": now,
+            "ticker": ticker,
+            "name": name,
+            "price": price,
+            "nav_jpy": nav_jpy,
+            "deviation_pct": deviation
+        })
 
-      - name: Commit and push results
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+    # --- CSV追記 ---
+    csv_filename = "1672etal.csv"
+    df_new = pd.DataFrame(data)
 
-          # 生成ファイルを追加
-          git add 1672etal.csv 1672*.png || true
+    if os.path.exists(csv_filename):
+        df_existing = pd.read_csv(csv_filename)
+        df_all = pd.concat([df_existing, df_new], ignore_index=True)
+    else:
+        df_all = df_new
 
-          # リモートの最新を取り込む（競合を避けるため ours 戦略）
-          git fetch origin main
-          git merge --strategy-option ours origin/main || true
+    # timestamp列をdatetime型に変換・整列
+    df_all["timestamp"] = pd.to_datetime(df_all["timestamp"])
+    df_all.sort_values("timestamp", inplace=True)
+    df_all.to_csv(csv_filename, index=False)
+    print(f"✅ Data appended to {csv_filename}")
 
-          # 差分があればコミット＆プッシュ
-          if ! git diff --cached --quiet; then
-            git commit -m "Update 1672etal ETF data"
-            git push origin main
-          else
-            echo "No changes to commit."
-          fi
+    # --- 銘柄ごとにPNG作成 ---
+    colors = {
+        "Gold": "gold",
+        "Silver": "gray",
+        "Platinum": "purple",
+        "Palladium": "brown"
+    }
+
+    for name in tickers.values():
+        df_sub = df_all[df_all["name"] == name]
+        if df_sub.empty:
+            print(f"⚠️ No data to plot for {name}")
+            continue
+
+        png_filename = f"{[k for k, v in tickers.items() if v == name][0].split('.')[0]}.png"
+
+        plt.figure(figsize=(10, 8))
+
+        # ETF価格とNAVを描画
+        plt.plot(df_sub["timestamp"], df_sub["price"],
+                 label=f"{name} ETF", color=colors[name], linestyle="-", marker="o")
+        if df_sub["nav_jpy"].notna().any():
+            plt.plot(df_sub["timestamp"], df_sub["nav_jpy"],
+                     label=f"{name} NAV", color=colors[name], linestyle="--", marker="x")
+
+        # 乖離率を第2軸で表示
+        ax2 = plt.gca().twinx()
+        ax2.plot(df_sub["timestamp"], df_sub["deviation_pct"],
+                 label="Deviation (%)", color="red", linestyle=":", marker=".")
+
+        plt.title(f"{name} ETF vs NAV (JPY)")
+        plt.xlabel("Time (JST)")
+        plt.ylabel("Price / NAV (JPY)")
+        ax2.set_ylabel("Deviation (%)")
+
+        plt.xticks(rotation=45, ha="right")
+
+        # 凡例
+        h1, l1 = plt.gca().get_legend_handles_labels()
+        h2, l2 = ax2.get_legend_handles_labels()
+        plt.legend(h1 + h2, l1 + l2, loc="best")
+
+        plt.tight_layout()
+        plt.savefig(png_filename)
+        plt.close()
+        print(f"✅ Chart updated: {png_filename}")
+
+    # --- 最新乖離率の表示 ---
+    print("\nLatest Deviation Rates:")
+    for row in data:
+        print(f"{row['name']} ({row['ticker']}) ETF%NAV: {row['deviation_pct']:.2f}%")
+
+if __name__ == "__main__":
+    main()
