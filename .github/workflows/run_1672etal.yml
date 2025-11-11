@@ -2,11 +2,15 @@ name: Run 1672etal ETF Tracker
 
 on:
   schedule:
-    # 平日（月〜金）の日本時間 朝8時・昼12時・夕方16時 に実行
-    - cron: '0 23 * * 0-4'  # 8:00 JST（前日23:00 UTC）
-    - cron: '0 3 * * 1-5'   # 12:00 JST（当日3:00 UTC）
-    - cron: '0 7 * * 1-5'   # 16:00 JST（当日7:00 UTC）
-  workflow_dispatch:
+    # JST = UTC +9
+    # 平日（月〜金）の 8:00 / 12:00 / 16:00 に実行
+    - cron: '0 23 * * 0-4'  # 月〜金 8:00 JST（＝前日23:00 UTC）
+    - cron: '0 3 * * 1-5'   # 月〜金 12:00 JST（＝同日03:00 UTC）
+    - cron: '0 7 * * 1-5'   # 月〜金 16:00 JST（＝同日07:00 UTC）
+  workflow_dispatch:        # 手動実行も可
+
+permissions:
+  contents: write  # ← github-actions[bot] が push できるようにする
 
 jobs:
   run:
@@ -15,6 +19,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -30,17 +36,18 @@ jobs:
           python 1672etal.py
 
       - name: Commit and push results
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 生成ファイルを追加
           git add 1672etal.csv 1672*.png || true
 
-          # リモート更新を先に取り込む（競合防止）
-          git pull --rebase origin main || true
+          # リモートの最新を取り込む（競合を避けるため ours 戦略）
+          git fetch origin main
+          git merge --strategy-option ours origin/main || true
 
-          # 変更がある場合のみコミット・プッシュ
+          # 差分があればコミット＆プッシュ
           if ! git diff --cached --quiet; then
             git commit -m "Update 1672etal ETF data"
             git push origin main
