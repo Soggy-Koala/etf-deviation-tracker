@@ -56,7 +56,7 @@ def main():
 
     # --- プロット ---
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10), sharex=True)
-    color = "gold"
+    color = "black"
 
     for name in tickers.values():
         df_sub = df_all[df_all["name"] == name]
