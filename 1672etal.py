@@ -23,7 +23,7 @@ def main():
         price = t.history(period="1d")["Close"].iloc[-1]
         nav = t.info.get("navPrice")
 
-        if nav:
+        if nav is not None:
             nav_jpy = nav * usd_jpy
             deviation = (price - nav_jpy) / nav_jpy * 100
         else:
@@ -68,23 +68,27 @@ def main():
     for name in tickers.values():
         df_sub = df_all[df_all["name"] == name]
         if df_sub.empty:
+            print(f"⚠ No data for {name}")
             continue
 
         plt.figure(figsize=(10, 6))
+
         # ETF実線
         plt.plot(df_sub["timestamp"], df_sub["price"],
                  label=f"{name} ETF", color=colors[name], linestyle="-", marker="o")
-        # NAV点線
+
+        # NAV点線（存在する場合のみ）
         if df_sub["nav_jpy"].notna().any():
             plt.plot(df_sub["timestamp"], df_sub["nav_jpy"],
                      label=f"{name} NAV", color=colors[name], linestyle="--", marker="x")
 
         # 最新乖離率をグラフ上に表示
-        latest_dev = df_sub["deviation_pct"].iloc[-1]
-        plt.text(df_sub["timestamp"].iloc[-1],
-                 df_sub["price"].iloc[-1],
-                 f"{latest_dev:.2f}%", color=colors[name], fontsize=10,
-                 ha="left", va="bottom")
+        latest_dev = df_sub["deviation_pct"].dropna().iloc[-1] if df_sub["deviation_pct"].notna().any() else None
+        if latest_dev is not None:
+            plt.text(df_sub["timestamp"].iloc[-1],
+                     df_sub["price"].iloc[-1],
+                     f"{latest_dev:.2f}%", color=colors[name],
+                     fontsize=10, ha="left", va="bottom")
 
         plt.xlabel("Time (JST)")
         plt.ylabel("Price / NAV (JPY)")
@@ -93,7 +97,7 @@ def main():
         plt.legend()
         plt.tight_layout()
 
-        # 銘柄ごとにPNG保存
+        # PNG保存
         png_filename = f"{name}.png"
         plt.savefig(png_filename)
         plt.close()
