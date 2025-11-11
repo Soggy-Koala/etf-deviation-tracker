@@ -105,8 +105,6 @@ for name in tickers.values():
     plt.close()
 
     print(f"✅ Chart updated: {png_filename}")
-        
-        print(f"✅ Chart updated: {png_filename}")
 
     # --- 最新乖離率の表示 ---
     print("\nLatest Deviation Rates:")
