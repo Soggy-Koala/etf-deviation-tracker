@@ -39,7 +39,7 @@ def main():
         })
 
     # --- CSV 蓄積 ---
-    csv_filename = "metals.csv"
+    csv_filename = "1672etal.csv"
     df_new = pd.DataFrame(data)
     if os.path.exists(csv_filename):
         df_existing = pd.read_csv(csv_filename)
