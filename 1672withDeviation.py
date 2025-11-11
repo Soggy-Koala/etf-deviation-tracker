@@ -39,8 +39,8 @@ def main():
             "deviation_pct": deviation
         })
 
-    csv_filename = "1672.csv"
-    png_filename = "1672.png"
+    csv_filename = "1672withDeviation.csv"
+    png_filename = "1672withDeviation.png"
 
     # --- CSV追記 ---
     df_new = pd.DataFrame(data)
