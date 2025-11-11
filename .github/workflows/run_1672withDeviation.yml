@@ -1,4 +1,4 @@
-name: Run 1672 ETF Tracker
+name: Run 1672 with Deviation ETF Tracker
 
 on:
   schedule:
