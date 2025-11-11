@@ -64,50 +64,48 @@ def main():
     print(f"✅ Data appended to {csv_filename}")
 
     # --- 銘柄ごとにPNG作成 ---
-    colors = {
-        "Gold": "gold",
-        "Silver": "gray",
-        "Platinum": "purple",
-        "Palladium": "brown"
-    }
+    # --- プロット ---
+colors = {
+    "Gold": "gold",
+    "Silver": "gray",
+    "Platinum": "purple",
+    "Palladium": "brown"
+}
 
-    for name in tickers.values():
-        df_sub = df_all[df_all["name"] == name]
-        if df_sub.empty:
-            print(f"⚠️ No data to plot for {name}")
-            continue
+for name in tickers.values():
+    df_sub = df_all[df_all["name"] == name]
+    if df_sub.empty:
+        continue
 
-        png_filename = f"{[k for k, v in tickers.items() if v == name][0].split('.')[0]}.png"
+    plt.figure(figsize=(10, 6))
 
-        plt.figure(figsize=(10, 8))
+    # ETF実線・NAV点線を描画
+    plt.plot(df_sub["timestamp"], df_sub["price"],
+             label=f"{name} ETF", color=colors[name], linestyle="-", marker="o")
+    if df_sub["nav_jpy"].notna().any():
+        plt.plot(df_sub["timestamp"], df_sub["nav_jpy"],
+                 label=f"{name} NAV", color=colors[name], linestyle="--", marker="x")
 
-        # ETF価格とNAVを描画
-        plt.plot(df_sub["timestamp"], df_sub["price"],
-                 label=f"{name} ETF", color=colors[name], linestyle="-", marker="o")
-        if df_sub["nav_jpy"].notna().any():
-            plt.plot(df_sub["timestamp"], df_sub["nav_jpy"],
-                     label=f"{name} NAV", color=colors[name], linestyle="--", marker="x")
+    # 乖離率をグラフ上に表示
+    latest_dev = df_sub["deviation_pct"].iloc[-1]
+    plt.text(df_sub["timestamp"].iloc[-1],
+             df_sub["price"].iloc[-1],
+             f"{latest_dev:.2f}%", color=colors[name])
 
-        # 乖離率を第2軸で表示
-        ax2 = plt.gca().twinx()
-        ax2.plot(df_sub["timestamp"], df_sub["deviation_pct"],
-                 label="Deviation (%)", color="red", linestyle=":", marker=".")
+    plt.xlabel("Time (JST)")
+    plt.ylabel("Price / NAV (JPY)")
+    plt.title(f"ETF vs NAV ({name})")
+    plt.xticks(rotation=45, ha="right")
+    plt.legend()
+    plt.tight_layout()
 
-        plt.title(f"{name} ETF vs NAV (JPY)")
-        plt.xlabel("Time (JST)")
-        plt.ylabel("Price / NAV (JPY)")
-        ax2.set_ylabel("Deviation (%)")
+    # 銘柄ごとにPNGファイルを保存
+    png_filename = f"{name}.png"
+    plt.savefig(png_filename)
+    plt.close()
 
-        plt.xticks(rotation=45, ha="right")
-
-        # 凡例
-        h1, l1 = plt.gca().get_legend_handles_labels()
-        h2, l2 = ax2.get_legend_handles_labels()
-        plt.legend(h1 + h2, l1 + l2, loc="best")
-
-        plt.tight_layout()
-        plt.savefig(png_filename)
-        plt.close()
+    print(f"✅ Chart updated: {png_filename}")
+        
         print(f"✅ Chart updated: {png_filename}")
 
     # --- 最新乖離率の表示 ---
