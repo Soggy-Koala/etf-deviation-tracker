@@ -7,7 +7,7 @@ import yfinance as yf
 
 def main():
     # --- 銘柄リスト ---
-    tickers = {"1673.T": "Silver"}
+    tickers = {"1674.T": "Platinum"}
 
     usd_jpy = yf.Ticker("JPY=X").history(period="1d")["Close"].iloc[-1]
 
@@ -35,7 +35,7 @@ def main():
 
     # --- ファイル設定 ---
     csv_filename = "1672withDeviation.csv"
-    png_filename = "1673withDeviation.png"
+    png_filename = "1674withDeviation.png"
 
     # --- CSV追記 ---
     df_new = pd.DataFrame(data)
@@ -54,7 +54,7 @@ def main():
     color_price = "blue"
     color_deviation = "black"
 
-    df_sub = df_all[df_all["name"] == "Silver"]
+    df_sub = df_all[df_all["name"] == "Platinum"]
 
     if not df_sub.empty:
         fig, ax1 = plt.subplots(figsize=(10, 6))
@@ -75,7 +75,7 @@ def main():
 
         # 凡例
         fig.legend(loc="upper left", bbox_to_anchor=(0.1, 0.9))
-        plt.title("ETF vs NAV and Deviation (1673)")
+        plt.title("ETF vs NAV and Deviation (1674)")
         fig.tight_layout()
         plt.xticks(rotation=45, ha="right")
 
