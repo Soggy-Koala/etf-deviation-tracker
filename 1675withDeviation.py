@@ -7,7 +7,7 @@ import yfinance as yf
 
 def main():
     # --- 銘柄リスト ---
-    tickers = {"1675.T": "Platinum"}
+    tickers = {"1675.T": "Palladium"}
 
     usd_jpy = yf.Ticker("JPY=X").history(period="1d")["Close"].iloc[-1]
 
@@ -54,7 +54,7 @@ def main():
     color_price = "blue"
     color_deviation = "black"
 
-    df_sub = df_all[df_all["name"] == "Platinum"]
+    df_sub = df_all[df_all["name"] == "Palladium"]
 
     if not df_sub.empty:
         fig, ax1 = plt.subplots(figsize=(10, 6))
