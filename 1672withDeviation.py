@@ -6,22 +6,16 @@ from datetime import datetime
 import yfinance as yf
 
 def main():
+    # --- 銘柄リスト ---
     tickers = {"1672.T": "Gold"}
+
     usd_jpy = yf.Ticker("JPY=X").history(period="1d")["Close"].iloc[-1]
 
     data = []
     for ticker, name in tickers.items():
         t = yf.Ticker(ticker)
-        hist = t.history(period="1d")
-        if hist.empty:
-            print(f"⚠️ {ticker} に価格データがありません。")
-            continue
-
-        price = hist["Close"].iloc[-1]
-        info = t.info
-        nav = info.get("navPrice") or info.get("previousClose")
-
-        print(f"{name}: price={price}, nav={nav}")  # デバッグ出力
+        price = t.history(period="1d")["Close"].iloc[-1]
+        nav = t.info.get("navPrice")
 
         if nav:
             nav_jpy = nav * usd_jpy
@@ -39,8 +33,9 @@ def main():
             "deviation_pct": deviation
         })
 
-    csv_filename = "1672withDeviation.csv"
-    png_filename = "1672withDeviation.png"
+    # --- ファイル設定 ---
+    csv_filename = "1672.csv"
+    png_filename = "1672_with_deviation.png"
 
     # --- CSV追記 ---
     df_new = pd.DataFrame(data)
@@ -54,45 +49,38 @@ def main():
     df_all.sort_values("timestamp", inplace=True)
     df_all.to_csv(csv_filename, index=False)
 
-    # --- プロット ---
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10), sharex=True)
-    color = "black"
+    # --- グラフ描画 ---
+    plt.figure(figsize=(10, 6))
+    color_price = "gold"
+    color_deviation = "tab:red"
 
-    for name in tickers.values():
-        df_sub = df_all[df_all["name"] == name]
-        if df_sub.empty:
-            continue
+    df_sub = df_all[df_all["name"] == "Gold"]
 
-        # 上段：価格・NAV
-        ax1.plot(df_sub["timestamp"], df_sub["price"], label=f"{name} ETF", color=color, marker="o")
+    if not df_sub.empty:
+        fig, ax1 = plt.subplots(figsize=(10, 6))
+
+        # 左軸（ETFとNAV）
+        ax1.set_xlabel("Time (JST)")
+        ax1.set_ylabel("Price (JPY)", color=color_price)
+        ax1.plot(df_sub["timestamp"], df_sub["price"], label="ETF", color=color_price, linestyle="-", marker="o")
         if df_sub["nav_jpy"].notna().any():
-            ax1.plot(df_sub["timestamp"], df_sub["nav_jpy"], label=f"{name} NAV", color=color, linestyle="--", marker="x")
+            ax1.plot(df_sub["timestamp"], df_sub["nav_jpy"], label="NAV", color=color_price, linestyle="--", marker="x")
+        ax1.tick_params(axis="y", labelcolor=color_price)
 
-        # 下段：乖離率
-        if df_sub["deviation_pct"].notna().any():
-            ax2.plot(df_sub["timestamp"], df_sub["deviation_pct"], label=f"{name} Deviation (%)", color=color, marker="o")
+        # 右軸（乖離率）
+        ax2 = ax1.twinx()
+        ax2.set_ylabel("Deviation (%)", color=color_deviation)
+        ax2.plot(df_sub["timestamp"], df_sub["deviation_pct"], label="Deviation", color=color_deviation, linestyle=":", marker="s")
+        ax2.tick_params(axis="y", labelcolor=color_deviation)
 
-    # --- 軸・凡例など ---
-    ax1.set_ylabel("Price / NAV (JPY)")
-    ax1.set_title("ETF vs NAV (1672)")
-    ax1.legend()
+        # 凡例
+        fig.legend(loc="upper left", bbox_to_anchor=(0.1, 0.9))
+        plt.title("ETF vs NAV and Deviation (1672)")
+        fig.tight_layout()
+        plt.xticks(rotation=45, ha="right")
 
-    ax2.set_xlabel("Time (JST)")
-    ax2.set_ylabel("Deviation (%)")
-    ax2.axhline(0, color="gray", linestyle="--", linewidth=1)
-    ax2.legend()
-
-    plt.xticks(rotation=45, ha="right")
-    plt.tight_layout()
-    plt.savefig(png_filename)
-    plt.close()
-
-    # --- 最新乖離率をコンソール表示 ---
-    for row in data:
-        if row['deviation_pct'] is not None:
-            print(f"{row['name']} ({row['ticker']}): 乖離率 = {row['deviation_pct']:.2f}%")
-        else:
-            print(f"{row['name']} ({row['ticker']}): NAV 取得不可")
+        plt.savefig(png_filename)
+        plt.close()
 
     print(f"✅ Data appended to {csv_filename}")
     print(f"✅ Chart updated: {png_filename}")
