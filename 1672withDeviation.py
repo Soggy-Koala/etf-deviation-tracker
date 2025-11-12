@@ -35,7 +35,7 @@ def main():
 
     # --- ファイル設定 ---
     csv_filename = "1672.csv"
-    png_filename = "1672_with_deviation.png"
+    png_filename = "1672withDeviation.png"
 
     # --- CSV追記 ---
     df_new = pd.DataFrame(data)
@@ -51,8 +51,8 @@ def main():
 
     # --- グラフ描画 ---
     plt.figure(figsize=(10, 6))
-    color_price = "gold"
-    color_deviation = "tab:red"
+    color_price = "gray"
+    color_deviation = "black"
 
     df_sub = df_all[df_all["name"] == "Gold"]
 
