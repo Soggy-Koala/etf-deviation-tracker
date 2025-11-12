@@ -51,7 +51,7 @@ def main():
 
     # --- グラフ描画 ---
     plt.figure(figsize=(10, 6))
-    color_price = "gray"
+    color_price = "blue"
     color_deviation = "black"
 
     df_sub = df_all[df_all["name"] == "Gold"]
