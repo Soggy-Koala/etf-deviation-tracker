@@ -34,7 +34,7 @@ def main():
         })
 
     # --- ファイル設定 ---
-    csv_filename = "1672.csv"
+    csv_filename = "1672withDeviation.csv"
     png_filename = "1672withDeviation.png"
 
     # --- CSV追記 ---
