@@ -13,20 +13,20 @@ def plot_single(df, target_name, output_filename):
     fig, ax1 = plt.subplots(figsize=(10, 6))
 
     color_price = "blue"
-    color_deviation = "black"
+    color_deviation = "gray"
 
     # 左軸：ETFとNAV
     ax1.set_xlabel("Time (JST)")
     ax1.set_ylabel("Price (JPY)", color=color_price)
-    ax1.plot(df_sub["timestamp"], df_sub["price"], label="ETF", color=color_price, linestyle="-", marker="o")
+    ax1.plot(df_sub["timestamp"], df_sub["price"], label="ETF", color=color_price, linestyle="-", marker=".")
     if df_sub["nav_jpy"].notna().any():
-        ax1.plot(df_sub["timestamp"], df_sub["nav_jpy"], label="NAV", color=color_price, linestyle="--", marker="x")
+        ax1.plot(df_sub["timestamp"], df_sub["nav_jpy"], label="NAV", color=color_price, linestyle="--", marker=".")
     ax1.tick_params(axis="y", labelcolor=color_price)
 
     # 右軸：乖離率
     ax2 = ax1.twinx()
     ax2.set_ylabel("Deviation (%)", color=color_deviation)
-    ax2.plot(df_sub["timestamp"], df_sub["deviation_pct"], label="Deviation", color=color_deviation, linestyle=":", marker="s")
+    ax2.plot(df_sub["timestamp"], df_sub["deviation_pct"], label="Deviation", color=color_deviation, linestyle=":", marker=".")
     ax2.tick_params(axis="y", labelcolor=color_deviation)
 
     # 凡例と体裁
