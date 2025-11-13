@@ -2,20 +2,19 @@ name: Run fetchETFdata
 
 on:
   schedule:
-    # 日本時間 8:00〜16:00 の間に 1時間ごと実行（UTC 23〜7 時）
-    - cron: '0 23 * * *'  # 8:00 JST
-    - cron: '0 0 * * *'  # 9:00 JST
-    - cron: '0 1 * * *'  # 10:00 JST
-    - cron: '0 2 * * *'  # 11:00 JST
-    - cron: '0 3 * * *'  # 12:00 JST
-    - cron: '0 4 * * *'  # 13:00 JST
-    - cron: '0 5 * * *'  # 14:00 JST
-    - cron: '0 6 * * *'  # 15:00 JST
-    - cron: '0 7 * * *'  # 16:00 JST
-    - cron: '0 8 * * *'  # 17:00 JST
-    - cron: '0 9 * * *'  # 18:00 JST
+    - cron: '0 23 * * *'
+    - cron: '0 0 * * *'
+    - cron: '0 1 * * *'
+    - cron: '0 2 * * *'
+    - cron: '0 3 * * *'
+    - cron: '0 4 * * *'
+    - cron: '0 5 * * *'
+    - cron: '0 6 * * *'
+    - cron: '0 7 * * *'
+    - cron: '0 8 * * *'
+    - cron: '0 9 * * *'
   workflow_dispatch:
-  
+
 permissions:
   contents: write
 
@@ -38,28 +37,25 @@ jobs:
         run: |
           pip install yfinance matplotlib pandas
 
+      # 🔹 ここでリポジトリを最新にしておく
+      - name: Prepare repository
+        run: |
+          git fetch origin main
+          git checkout main
+          git reset --hard origin/main
+
+      # 🔹 スクリプトを実行して CSV を更新
       - name: Run fetchETFdata
         run: |
           python python-codes/fetchETFdata.py
 
+      # 🔹 更新をコミットしてプッシュ
       - name: Commit and push if changed
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Always fetch the latest from remote first
-          git fetch origin main
-
-          # Reset local main to remote main (discard any local differences)
-          git checkout main
-          git reset --hard origin/main
-
-          # Apply changes
-          git add .
-          git commit -m "Update 1672 ETF data" || exit 0
-
-          # Push safely (force if necessary)
+          git add ETFdata.csv || true
+          git diff --cached --quiet || git commit -m "Update 1672 ETF data"
           git push origin main
-
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
