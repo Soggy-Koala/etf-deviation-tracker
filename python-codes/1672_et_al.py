@@ -68,7 +68,7 @@ def main():
         "1673.T": "Silver",
         "1674.T": "Platinum",
         "1675.T": "Palladium",
-        "1676.T": "NobleMetal"
+        "1676.T": "Noble Metal"
     }
 
     # --- 各銘柄ごとにPNG生成 ---
