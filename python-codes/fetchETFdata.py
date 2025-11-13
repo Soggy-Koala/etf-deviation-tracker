@@ -11,7 +11,11 @@ def main():
                "1673.T": "Silver",
                "1674.T": "Platinum",
                "1675.T": "Palladium",
-               "1676.T": "Noble Metal"
+               "1676.T": "Noble Metal",
+               "1540.T": "Gold 1540",
+               "1542.T": "Silver 1542",
+               "1541.T": "Platinum 1541",
+               "1543.T": "Palladium 1543"
               }
 
     usd_jpy = yf.Ticker("JPY=X").history(period="1d")["Close"].iloc[-1]
