@@ -32,7 +32,7 @@ def main():
     plt.tight_layout()
 
     # === 保存 ===
-    output_file = "ETF_deviation_plot.png"
+    output_file = "deviation_1672_et_al.png"
     plt.savefig(output_file, dpi=300)
     print(f"✅ グラフを保存しました: {output_file}")
 
