@@ -1,0 +1,70 @@
+name: Make PNG 1540 et al
+
+on:
+  schedule:
+    # 日本時間 8:30〜18:30 の間に毎時実行（UTC 23:30〜9:30）
+    - cron: '30 23 * * *'  # 8:30 JST
+    - cron: '30 0 * * *'   # 9:30 JST
+    - cron: '30 1 * * *'   # 10:30 JST
+    - cron: '30 2 * * *'   # 11:30 JST
+    - cron: '30 3 * * *'   # 12:30 JST
+    - cron: '30 4 * * *'   # 13:30 JST
+    - cron: '30 5 * * *'   # 14:30 JST
+    - cron: '30 6 * * *'   # 15:30 JST
+    - cron: '30 7 * * *'   # 16:30 JST
+    - cron: '30 8 * * *'   # 17:30 JST
+    - cron: '30 9 * * *'   # 18:30 JST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  make-png:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ✅ リポジトリをチェックアウト
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # ✅ Python セットアップ
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # ✅ 依存関係インストール
+      - name: 📦 依存関係インストール
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas matplotlib
+
+      # ✅ 個別ETFのPNG生成
+      - name: 📊 個別グラフ生成
+        run: python python-codes/1540_et_al.py
+
+      # ✅ 5銘柄まとめの乖離率グラフ生成
+      - name: 📉 乖離率グラフ生成
+        run: python python-codes/deviation_1540_et_al.py
+
+      # ✅ PNGファイルに変更があればコミット・プッシュ
+      - name: 🧾 変更があればコミット
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # PNGファイルをステージング
+          git add *.png
+
+          # 差分があればコミットしてプッシュ
+          if git diff --cached --quiet; then
+            echo "No PNG updates — skipping commit."
+          else
+            git commit -m "Auto-update ETF PNG charts"
+            git push origin main
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
