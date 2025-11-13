@@ -46,9 +46,20 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin main || true
+
+          # Always fetch the latest from remote first
+          git fetch origin main
+
+          # Reset local main to remote main (discard any local differences)
+          git checkout main
+          git reset --hard origin/main
+
+          # Apply changes
           git add .
           git commit -m "Update 1672 ETF data" || exit 0
+
+          # Push safely (force if necessary)
           git push origin main
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
