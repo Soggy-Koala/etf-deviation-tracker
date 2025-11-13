@@ -3,38 +3,36 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def main():
-    # === CSV 読み込み ===
-    csv_filename = "ETFdata.csv"
-    df = pd.read_csv(csv_filename)
-
-    # timestampをdatetimeに変換
+    # --- データ読み込み ---
+    df = pd.read_csv("ETFdata.csv")
     df["timestamp"] = pd.to_datetime(df["timestamp"])
 
-    # 対象ティッカー
-    tickers = ["1672.T", "1673.T", "1674.T", "1675.T", "1676.T"]
+    # --- カラーマップ設定 ---
+    colors = {
+        "1672.T": "#DAA520",  # Gold - goldenrod
+        "1673.T": "#A9A9A9",  # Silver - dark gray
+        "1674.T": "#708090",  # Platinum - slate gray
+        "1675.T": "#8B4513",  # Palladium - saddle brown
+        "1676.T": "#800080",  # Noble Metal - purple
+    }
 
-    # === プロット設定 ===
-    plt.figure(figsize=(12, 6))
+    # --- グラフ描画 ---
+    plt.figure(figsize=(10, 6))
 
-    for ticker in tickers:
-        df_t = df[df["ticker"] == ticker]
-        if df_t.empty:
-            continue
-        label = df_t["name"].iloc[-1] if "name" in df_t.columns else ticker
-        plt.plot(df_t["timestamp"], df_t["deviation_pct"], label=label)
+    for ticker, color in colors.items():
+        sub = df[df["ticker"] == ticker]
+        plt.plot(sub["timestamp"], sub["deviation_pct"], label=ticker, color=color, linewidth=2)
 
-    # === グラフデザイン ===
-    plt.title("ETF 乖離率の推移 (1672–1676)", fontsize=14)
-    plt.xlabel("日時", fontsize=12)
-    plt.ylabel("乖離率 (%)", fontsize=12)
-    plt.legend(title="銘柄", fontsize=10)
-    plt.grid(True, linestyle="--", alpha=0.6)
+    plt.title("ETF Deviation (1672 et al)", fontsize=14)
+    plt.xlabel("Date")
+    plt.ylabel("Deviation (%)")
+    plt.grid(True, alpha=0.3)
+    plt.legend(title="Ticker")
     plt.tight_layout()
 
-    # === 保存 ===
-    output_file = "deviation_1672_et_al.png"
-    plt.savefig(output_file, dpi=300)
-    print(f"✅ グラフを保存しました: {output_file}")
+    # --- 保存 ---
+    plt.savefig("deviation_1672_et_al.png", dpi=300)
+    plt.close()
 
 if __name__ == "__main__":
     main()
