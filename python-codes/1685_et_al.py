@@ -63,7 +63,7 @@ def main():
     df.sort_values("timestamp", inplace=True)
 
     # --- 対象銘柄 ---
-    tickers_1685 = {
+    tickers = {
         "1685.T": "Energy",
         "1689.T": "Natural Gas",
         "1690.T": "WTI Crude Oil",
