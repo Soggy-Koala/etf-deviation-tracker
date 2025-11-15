@@ -9,10 +9,11 @@ def main():
 
     # --- カラーマップ設定 ---
     colors = {
-        "1686.T": "#DAA520",  # Industrial Metals - goldenrod,
-        "1692.T": "#0000FF",  # Aluminum - blue,
-        "1693.T": "#708090",  # Copper - slate gray,
-        "1694.T": "#8B4513",  # Nickel - saddle brown
+        "1687.T": "#DAA520",  # Agriculture - goldenrod,
+        "1688.T": "#0000FF",  # Grains
+        "1695.T": "#708090",  # Wheat
+        "1696.T": "#8B4513",  #"Corn
+        "1697.T": "#4daf4a",  #"Soybeans
     }
 
     # --- グラフ描画 ---
