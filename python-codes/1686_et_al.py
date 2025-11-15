@@ -64,10 +64,10 @@ def main():
 
     # --- 対象銘柄 ---
     tickers_1686 = {
-        "1685.T": "Energy",
-        "1689.T": "Natural Gas",
-        "1690.T": "WTI Crude Oil",
-        "1691.T": "Gasoline"
+        "1686.T": "Industrial Metals",
+        "1692.T": "Aluminum",
+        "1693.T": "Copper",
+        "1694.T": "Nickel"
     }
 
     # --- 各銘柄ごとにPNG生成 ---
