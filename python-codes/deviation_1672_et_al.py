@@ -10,7 +10,7 @@ def main():
     # --- カラーマップ設定 ---
     colors = {
         "1672.T": "#DAA520",  # Gold - goldenrod
-        "1673.T": "#A9A9A9",  # Silver - dark gray
+        "1673.T": "#0000FF",  # Silver - blue
         "1674.T": "#708090",  # Platinum - slate gray
         "1675.T": "#8B4513",  # Palladium - saddle brown
         "1676.T": "#800080",  # Noble Metal - purple
