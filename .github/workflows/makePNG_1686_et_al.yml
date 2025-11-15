@@ -3,17 +3,17 @@ name: Make PNG 1686 et al
 on:
   schedule:
     # 日本時間 8:30〜18:30 の間に毎時実行（UTC 23:30〜9:30）
-    - cron: '45 23 * * *'  # 8:30 JST
-    - cron: '45 0 * * *'   # 9:30 JST
-    - cron: '45 1 * * *'   # 10:30 JST
-    - cron: '45 2 * * *'   # 11:30 JST
-    - cron: '45 3 * * *'   # 12:30 JST
-    - cron: '45 4 * * *'   # 13:30 JST
-    - cron: '45 5 * * *'   # 14:30 JST
-    - cron: '45 6 * * *'   # 15:30 JST
-    - cron: '45 7 * * *'   # 16:30 JST
-    - cron: '45 8 * * *'   # 17:30 JST
-    - cron: '45 9 * * *'   # 18:30 JST
+    - cron: '20 23 * * *'  # 8:30 JST
+    - cron: '20 0 * * *'   # 9:30 JST
+    - cron: '20 1 * * *'   # 10:30 JST
+    - cron: '20 2 * * *'   # 11:30 JST
+    - cron: '20 3 * * *'   # 12:30 JST
+    - cron: '20 4 * * *'   # 13:30 JST
+    - cron: '20 5 * * *'   # 14:30 JST
+    - cron: '20 6 * * *'   # 15:30 JST
+    - cron: '20 7 * * *'   # 16:30 JST
+    - cron: '20 8 * * *'   # 17:30 JST
+    - cron: '20 9 * * *'   # 18:30 JST
   workflow_dispatch:
 
 permissions:
