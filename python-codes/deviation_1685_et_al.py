@@ -22,7 +22,7 @@ def main():
         sub = df[df["ticker"] == ticker]
         plt.plot(sub["timestamp"], sub["deviation_pct"], label=ticker, color=color, linewidth=2)
 
-    plt.title("ETF Deviation (1672 et al)", fontsize=14)
+    plt.title("ETF Deviation (1685 et al)", fontsize=14)
     plt.xlabel("Date")
     plt.ylabel("Deviation (%)")
     plt.grid(True, alpha=0.3)
@@ -30,7 +30,7 @@ def main():
     plt.tight_layout()
 
     # --- 保存 ---
-    plt.savefig("deviation_1672_et_al.png", dpi=300)
+    plt.savefig("deviation_1685_et_al.png", dpi=300)
     plt.close()
 
 if __name__ == "__main__":
