@@ -74,6 +74,46 @@ def main():
             "nav_jpy": nav_jpy,
             "deviation_pct": deviation
         })
+    for ticker, name in tickers_1685.items():
+        t = yf.Ticker(ticker)
+        price = t.history(period="1d")["Close"].iloc[-1]
+        nav = t.info.get("navPrice")
+
+        if nav:
+            nav_jpy = nav * usd_jpy
+            deviation = (price - nav_jpy) / nav_jpy * 100
+        else:
+            nav_jpy = None
+            deviation = None
+
+        data.append({
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "ticker": ticker,
+            "name": name,
+            "price": price,
+            "nav_jpy": nav_jpy,
+            "deviation_pct": deviation
+        })
+    for ticker, name in tickers_1686.items():
+        t = yf.Ticker(ticker)
+        price = t.history(period="1d")["Close"].iloc[-1]
+        nav = t.info.get("navPrice")
+
+        if nav:
+            nav_jpy = nav * usd_jpy
+            deviation = (price - nav_jpy) / nav_jpy * 100
+        else:
+            nav_jpy = None
+            deviation = None
+
+        data.append({
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "ticker": ticker,
+            "name": name,
+            "price": price,
+            "nav_jpy": nav_jpy,
+            "deviation_pct": deviation
+        })
 
     # --- ファイル設定 ---
     csv_filename = "ETFdata.csv"
