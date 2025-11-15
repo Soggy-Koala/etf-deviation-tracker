@@ -63,12 +63,11 @@ def main():
     df.sort_values("timestamp", inplace=True)
 
     # --- 対象銘柄 ---
-    tickers = {
-        "1672.T": "Gold",
-        "1673.T": "Silver",
-        "1674.T": "Platinum",
-        "1675.T": "Palladium",
-        "1676.T": "Noble Metal"
+    tickers_1685 = {
+        "1685.T": "Energy",
+        "1689.T": "Natural Gas",
+        "1690.T": "WTI Crude Oil",
+        "1691.T": "Gasoline"
     }
 
     # --- 各銘柄ごとにPNG生成 ---
