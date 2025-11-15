@@ -19,7 +19,18 @@ def main():
                "1541.T": "Platinum 1541",
                "1543.T": "Palladium 1543"
     }
-
+    tickers_1685 = {
+        "1685.T": "Energy",
+        "1689.T": "Natural Gas",
+        "1690.T": "WTI Crude Oil",
+        "1691.T": "Gasoline"
+    }
+    tickers_1686 = {
+        "1686.T": "Industrial Metals",
+        "1692.T": "Aluminum",
+        "1693.T": "Copper",
+        "1694.T": "Nickel"
+    }
     usd_jpy = yf.Ticker("JPY=X").history(period="1d")["Close"].iloc[-1]
 
     data = []
