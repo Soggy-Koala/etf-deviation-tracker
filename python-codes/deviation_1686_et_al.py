@@ -9,10 +9,10 @@ def main():
 
     # --- カラーマップ設定 ---
     colors = {
-        "1686.T": "#DAA520",  # Energy - goldenrod
-        "1689.T": "#0000FF",  # Natural Gas - blue
-        "1690.T": "#708090",  # WTI Crude Oil - slate gray
-        "1691.T": "#8B4513",  # Gasoline - saddle brown
+        "1686.T": "#DAA520",  # Industrial Metals - goldenrod,
+        "1692.T": "#0000FF",  # Aluminum - blue,
+        "1693.T": "#708090",  # Copper - slate gray,
+        "1694.T": "#8B4513",  # Nickel - saddle brown
     }
 
     # --- グラフ描画 ---
@@ -30,7 +30,7 @@ def main():
     plt.tight_layout()
 
     # --- 保存 ---
-    plt.savefig("deviation_1685_et_al.png", dpi=300)
+    plt.savefig("deviation_1686_et_al.png", dpi=300)
     plt.close()
 
 if __name__ == "__main__":
