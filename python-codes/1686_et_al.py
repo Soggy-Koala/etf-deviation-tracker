@@ -63,7 +63,7 @@ def main():
     df.sort_values("timestamp", inplace=True)
 
     # --- 対象銘柄 ---
-    tickers_1686 = {
+    tickers = {
         "1686.T": "Industrial Metals",
         "1692.T": "Aluminum",
         "1693.T": "Copper",
