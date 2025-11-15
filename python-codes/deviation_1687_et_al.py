@@ -31,7 +31,7 @@ def main():
     plt.tight_layout()
 
     # --- 保存 ---
-    plt.savefig("deviation_1686_et_al.png", dpi=300)
+    plt.savefig("deviation_1687_et_al.png", dpi=300)
     plt.close()
 
 if __name__ == "__main__":
