@@ -65,9 +65,10 @@ def main():
     # --- 対象銘柄 ---
     tickers = {
         "1687.T": "Agriculture",
-        "1688.T": "Aluminum",
-        "1693.T": "Copper",
-        "1694.T": "Nickel"
+        "1688.T": "Grains",
+        "1695.T": "Wheat",
+        "1696.T": "Corn",
+        "1697.T": "Soybeans"
     }
 
     # --- 各銘柄ごとにPNG生成 ---
