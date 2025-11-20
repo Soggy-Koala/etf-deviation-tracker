@@ -26,7 +26,7 @@ def main():
     plt.xlabel("Date")
     plt.ylabel("Deviation (%)")
     plt.grid(True, alpha=0.3)
-    plt.legend(title="Ticker")
+    plt.legend(title="Ticker"+"Name")
     plt.tight_layout()
 
     # --- 保存 ---
