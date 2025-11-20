@@ -18,15 +18,15 @@ def main():
     # --- グラフ描画 ---
     plt.figure(figsize=(10, 6))
 
-    for ticker, color in colors.items():
+    for ticker, name, color in colors.items():
         sub = df[df["ticker"] == ticker]
-        plt.plot(sub["timestamp"], sub["deviation_pct"], label=ticker, color=color, linewidth=2)
+        plt.plot(sub["timestamp"], sub["deviation_pct"], label=ticker+name, color=color, linewidth=2)
 
     plt.title("ETF Deviation (1686 et al)", fontsize=14)
     plt.xlabel("Date")
     plt.ylabel("Deviation (%)")
     plt.grid(True, alpha=0.3)
-    plt.legend(title="Ticker"+"Name")
+    plt.legend(title="Ticker")
     plt.tight_layout()
 
     # --- 保存 ---
