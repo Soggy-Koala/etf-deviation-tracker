@@ -9,18 +9,24 @@ def main():
 
     # --- カラーマップ設定 ---
     colors = {
-        "1686.T":"Ind.Metals":"#DAA520",  # Industrial Metals - goldenrod,
-        "1692.T":"Aluminum":"#0000FF",  # Aluminum - blue,
-        "1693.T":"Copper":"#708090",  # Copper - slate gray,
-        "1694.T":"Nickel":"#8B4513",  # Nickel - saddle brown
+        "1686.T":"#DAA520",  # Industrial Metals - goldenrod,
+        "1692.T":"#0000FF",  # Aluminum - blue,
+        "1693.T":"#708090",  # Copper - slate gray,
+        "1694.T":"#8B4513",  # Nickel - saddle brown
     }
+    names = {
+        "1686.T":"Ind.Metals",
+        "1692.T":"Aluminum", 
+        "1693.T":"Copper", 
+        "1694.T":"Nickel"
+  }
 
     # --- グラフ描画 ---
     plt.figure(figsize=(10, 6))
 
-    for ticker, name, color in colors.items():
+    for ticker, color in colors.items():
         sub = df[df["ticker"] == ticker]
-        plt.plot(sub["timestamp"], sub["deviation_pct"], label=ticker+name, color=color, linewidth=2)
+        plt.plot(sub["timestamp"], sub["deviation_pct"], label=ticker+names.items(), color=color, linewidth=2)
 
     plt.title("ETF Deviation (1686 et al)", fontsize=14)
     plt.xlabel("Date")
