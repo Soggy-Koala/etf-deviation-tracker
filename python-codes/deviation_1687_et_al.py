@@ -15,13 +15,20 @@ def main():
         "1696.T": "#8B4513",  #"Corn
         "1697.T": "#4daf4a",  #"Soybeans
     }
+    names = {
+            "1687.T": "#DAA520",  # Agriculture - goldenrod,
+        "1688.T": "Grains",
+        "1695.T": "Wheat",
+        "1696.T": "Corn",
+        "1697.T": "Soybeans"
+    }
 
     # --- グラフ描画 ---
     plt.figure(figsize=(10, 6))
 
     for ticker, color in colors.items():
         sub = df[df["ticker"] == ticker]
-        plt.plot(sub["timestamp"], sub["deviation_pct"], label=ticker, color=color, linewidth=2)
+        plt.plot(sub["timestamp"], sub["deviation_pct"], label=ticker[0:4]+names[ticker], color=color, linewidth=2)
 
     plt.title("ETF Deviation (1687 et al)", fontsize=14)
     plt.xlabel("Date")
