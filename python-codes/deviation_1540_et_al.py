@@ -10,9 +10,15 @@ def main():
     # --- カラーマップ設定 ---
     colors = {
         "1540.T": "#DAA520",  # Gold - goldenrod
-        "1542.T": "#A9A9A9",  # Silver - dark gray
+        "1542.T": "#0000FF",  # Silver - dark gray
         "1541.T": "#708090",  # Platinum - slate gray
         "1543.T": "#8B4513"  # Palladium - saddle brown
+    }
+    names = {
+        "1540.T": "Gold",
+        "1542.T": "Silver",
+        "1541.T": "Platinum",
+        "1543.T": "Palladium"
     }
 
     # --- グラフ描画 ---
@@ -20,7 +26,7 @@ def main():
 
     for ticker, color in colors.items():
         sub = df[df["ticker"] == ticker]
-        plt.plot(sub["timestamp"], sub["deviation_pct"], label=ticker, color=color, linewidth=2)
+        plt.plot(sub["timestamp"], sub["deviation_pct"], label=ticker[0:4]+names[ticker], color=color, linewidth=2)
 
     plt.title("ETF Deviation (1540 et al)", fontsize=14)
     plt.xlabel("Date")
