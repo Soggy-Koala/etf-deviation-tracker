@@ -16,7 +16,7 @@ def main():
     }
     names = {
         "1685.T": "Energy",
-        "1689.T": "Natural Gas"
+        "1689.T": "Natural Gas",
         "1690.T": "WTI Crude Oil",
         "1691.T": "Gasoline"
     }
