@@ -14,13 +14,19 @@ def main():
         "1690.T": "#708090",  # WTI Crude Oil - slate gray
         "1691.T": "#8B4513",  # Gasoline - saddle brown
     }
+    names = {
+        "1685.T": "Energy",
+        "1689.T": "Natural Gas"
+        "1690.T": "WTI Crude Oil",
+        "1691.T": "Gasoline"
+    }
 
     # --- グラフ描画 ---
     plt.figure(figsize=(10, 6))
 
     for ticker, color in colors.items():
         sub = df[df["ticker"] == ticker]
-        plt.plot(sub["timestamp"], sub["deviation_pct"], label=ticker, color=color, linewidth=2)
+        plt.plot(sub["timestamp"], sub["deviation_pct"], label=ticker[0:4]+names[ticker], color=color, linewidth=2)
 
     plt.title("ETF Deviation (1685 et al)", fontsize=14)
     plt.xlabel("Date")
