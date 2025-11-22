@@ -16,7 +16,7 @@ def main():
         "1697.T": "#4daf4a",  #"Soybeans
     }
     names = {
-            "1687.T": "#DAA520",  # Agriculture - goldenrod,
+        "1687.T": "Agriculture", 
         "1688.T": "Grains",
         "1695.T": "Wheat",
         "1696.T": "Corn",
