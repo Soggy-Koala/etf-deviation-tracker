@@ -28,7 +28,7 @@ def main():
 
     for ticker, color in colors.items():
         sub = df[df["ticker"] == ticker]
-        plt.plot(sub["timestamp"], sub["deviation_pct"], label=ticker[0:4]+names[ticker], color=color, linewidth=2)
+        plt.plot(sub["timestamp"], sub["deviation_pct"], label=ticker[0:4]+" "+names[ticker], color=color, linewidth=2)
 
     plt.title("ETF Deviation (1687 et al)", fontsize=14)
     plt.xlabel("Date")
