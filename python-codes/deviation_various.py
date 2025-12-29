@@ -32,8 +32,8 @@ ETF_GROUPS = {
         "title": "ETF Deviation (1686 et al)",
         "output": "deviation_1686_et_al.png",
         "tickers": {
-            "1686.T": ("Ind. Metals", "#DAA520"), # goldenrod
-            "1692.T": ("Alminum", "#0000FF"), # blue
+            "1686.T": ("Industrial Metals", "#DAA520"), # goldenrod
+            "1692.T": ("Aluminum", "#0000FF"), # blue
             "1693.T": ("Copper", "#708090"), # slate gray
             "1694.T": ("Nickel", "#8B4513"), # saddle brown
         },
