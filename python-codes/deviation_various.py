@@ -91,13 +91,14 @@ def main():
     df = pd.read_csv("ETFdata.csv")
     df["timestamp"] = pd.to_datetime(df["timestamp"])
 
-    os.makedirs("png", exist_ok=True)
+    # os.makedirs("png", exist_ok=True)
 
     # --- 全グループを順番に描画 ---
     for key, group in ETF_GROUPS.items():
         draw_group(df, group)
 
-        output_path = os.path.join("png", group["output"])
+        #output_path = os.path.join("png", group["output"])
+        output_path = os.path.join("", group["output"])
         plt.savefig(output_path, dpi=300)
         plt.close()
 
