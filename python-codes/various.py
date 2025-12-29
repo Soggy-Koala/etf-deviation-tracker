@@ -24,9 +24,32 @@ GROUPS = {
             "1691.T": "Gasoline",
         }
     },
-    # 1686 / 1687 / 1540 を同様に追加
+   "1686": {
+        "tickers": {
+            "1686.T": "Ind. Metals",
+            "1692.T": "Alminum",
+            "1693.T": "Copper",
+            "1694.T": "Nickel",
+        }
+    },
+    "1687": {
+        "tickers": {
+            "1687.T": "Agriculture",
+            "1688.T": "Grains",
+            "1695.T": "Wheat",
+            "1696.T": "Corn",
+            "1697.T": "Soybeans",
+        },
+    },
+    "1540": {
+        "tickers": {
+            "1540.T": "Gold",
+            "1542.T": "Silver",
+            "1541.T": "Platinum",
+            "1543.T": "Palladium",
+        },
+    },
 }
-
 # ==================================================
 def plot_single(df, target_name, output_filename):
     """1銘柄分をプロットしてPNGに保存（1672方式の色分け）"""
