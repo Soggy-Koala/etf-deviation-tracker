@@ -1,4 +1,4 @@
-name: Make PNG ALL
+name: makePNG_all
 
 on:
   schedule:
