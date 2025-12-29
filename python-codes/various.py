@@ -134,12 +134,13 @@ def main():
     df = df.dropna(subset=["timestamp"])
     df.sort_values("timestamp", inplace=True)
 
-    os.makedirs("png", exist_ok=True)
+    #os.makedirs("png", exist_ok=True)
 
     # --- 全グループ・全銘柄を一気に生成 ---
     for group in GROUPS.values():
         for ticker, name in group["tickers"].items():
-            png_filename = f"png/{ticker.replace('.T', '')}.png"
+            #png_filename = f"png/{ticker.replace('.T', '')}.png"
+            png_filename = f"{ticker.replace('.T', '')}.png"
             plot_single(df, name, png_filename)
 
 # ==================================================
