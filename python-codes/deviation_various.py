@@ -28,7 +28,37 @@ ETF_GROUPS = {
             "1691.T": ("Gasoline", "#8B4513"),
         },
     },
-    # ↓ ここに 1686 / 1687 / 1540 を足していくだけ
+    "1686": {
+        "title": "ETF Deviation (1686 et al)",
+        "output": "deviation_1686_et_al.png",
+        "tickers": {
+            "1686.T": ("Ind. Metals", "#DAA520"), # goldenrod
+            "1692.T": ("Alminum", "#0000FF"), # blue
+            "1693.T": ("Copper", "#708090"), # slate gray
+            "1694.T": ("Nickel", "#8B4513"), # saddle brown
+        },
+    },
+    "1687": {
+        "title": "ETF Deviation (1687 et al)",
+        "output": "deviation_1687_et_al.png",
+        "tickers": {
+            "1687.T": ("Agriculture", "#DAA520"), # goldenrod
+            "1688.T": ("Grains", "#0000FF"), # blue
+            "1695.T": ("Wheat", "#708090"), # slate gray
+            "1696.T": ("Corn", "#8B4513"), # saddle brown
+            "1697.T": ("Soybeans", "#4daf4a"), # 
+        },
+    },
+    "1540": {
+        "title": "ETF Deviation (1540 et al)",
+        "output": "deviation_1540_et_al.png",
+        "tickers": {
+            "1540.T": ("Gold", "#DAA520"), # goldenrod
+            "1542.T": ("Silver", "#0000FF"), # blue
+            "1541.T": ("Platinum", "#708090"), # slate gray
+            "1543.T": ("Palladium", "#8B4513"), # saddle brown
+        },
+    },
 }
 
 # ==================================================
