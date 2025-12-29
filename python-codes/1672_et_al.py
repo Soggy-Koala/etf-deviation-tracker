@@ -12,15 +12,16 @@ def plot_single(df, target_name, output_filename):
 
     fig, ax1 = plt.subplots(figsize=(10, 6))
 
-    color_price = "blue"
+    color_etf_price = "blue"
+    color_nav_price = "orange"
     color_deviation = "gray"
 
     # 左軸：ETFとNAV
     ax1.set_xlabel("Time (JST)")
     ax1.set_ylabel("Price (JPY)", color=color_price)
-    ax1.plot(df_sub["timestamp"], df_sub["price"], label="ETF", color=color_price, linestyle="-", marker=".")
+    ax1.plot(df_sub["timestamp"], df_sub["price"], label="ETF", color=color_etf_price, linestyle="-", marker=".")
     if df_sub["nav_jpy"].notna().any():
-        ax1.plot(df_sub["timestamp"], df_sub["nav_jpy"], label="NAV", color=color_price, linestyle="--", marker=".")
+        ax1.plot(df_sub["timestamp"], df_sub["nav_jpy"], label="NAV", color=color_nav_price, linestyle="--", marker=".")
     ax1.tick_params(axis="y", labelcolor=color_price)
 
     # 右軸：乖離率
