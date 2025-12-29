@@ -15,6 +15,7 @@ def plot_single(df, target_name, output_filename):
     color_etf_price = "blue"
     color_nav_price = "orange"
     color_deviation = "gray"
+    color_price = "black"
 
     # 左軸：ETFとNAV
     ax1.set_xlabel("Time (JST)")
